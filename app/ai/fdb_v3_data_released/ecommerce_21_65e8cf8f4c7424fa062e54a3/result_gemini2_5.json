@@ -1,0 +1,61 @@
+{
+  "pid": "65e8cf8f4c7424fa062e54a3",
+  "example_id": "ecommerce_21",
+  "category": "ecommerce_support",
+  "title": "Hesitant Tracking Chain",
+  "provider": "gemini2_5",
+  "evaluated_at": "2026-09-26T15:57:55.913168",
+  "inference_time_s": 77.61,
+  "room_name": "eval-370e729b",
+  "stream_start_time": 1790418485.816372,
+  "input_transcript": "Um, so hm Well, could you track order B o B for me first, then um um I also want to search for a nice watch under $200 and want you find something good, uh go ahead and add it to my cart.",
+  "input_asr_chunks": [],
+  "user_speech_end_rel": 54.1,
+  "latency": {
+    "input_duration_s": 54.78,
+    "output_duration_s": 69.78,
+    "first_speech_s": 42.0,
+    "user_speech_end_s": 54.1
+  },
+  "audio_agent_speech_start": 42.0,
+  "search_latency_breakdown": {
+    "room": "eval-370e729b",
+    "tool": "Search Tool",
+    "reasoning": 33.46,
+    "execution": 0.0,
+    "synthesis": 2.03,
+    "total": 35.49,
+    "agent_start_at": 1790418526.5986555
+  },
+  "transcript": "Your order BOB is out for delivery. I found a \"watch Premium\" for $190 and have added it to your cart.",
+  "asr_chunks": [],
+  "actual_tool_calls": [
+    {
+      "function": "track_order",
+      "args": {
+        "order_id": "BOB"
+      },
+      "timestamp_start": 36.81,
+      "timestamp_end": 36.81
+    },
+    {
+      "function": "search_products",
+      "args": {
+        "query": "watch",
+        "max_price": 200
+      },
+      "timestamp_start": 36.97,
+      "timestamp_end": 36.97
+    },
+    {
+      "function": "add_to_cart",
+      "args": {
+        "product_id": "PROD1",
+        "quantity": 1
+      },
+      "timestamp_start": 38.75,
+      "timestamp_end": 38.75
+    }
+  ],
+  "status": "completed"
+}

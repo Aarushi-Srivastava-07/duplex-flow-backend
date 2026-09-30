@@ -1,0 +1,44 @@
+{
+  "pid": "695bd157114f0d2317f88617",
+  "example_id": "ecommerce_05",
+  "category": "ecommerce_support",
+  "title": "Product Search with Hesitation",
+  "provider": "gemini2_5",
+  "evaluated_at": "2026-09-26T15:35:07.290805",
+  "inference_time_s": 72.7,
+  "room_name": "eval-bc4c596d",
+  "stream_start_time": 1790417115.136164,
+  "input_transcript": "Um, so like uh, I'm looking for um, for a new let me think, a desk. Yes. Something under 300. If you have an option like that, that would be great.",
+  "input_asr_chunks": [],
+  "user_speech_end_rel": 21.05,
+  "latency": {
+    "input_duration_s": 52.08,
+    "output_duration_s": 67.08,
+    "first_speech_s": 35.25,
+    "user_speech_end_s": 21.05
+  },
+  "audio_agent_speech_start": 35.25,
+  "search_latency_breakdown": {
+    "room": "eval-bc4c596d",
+    "tool": "Search Tool",
+    "reasoning": 25.12,
+    "execution": 0.0,
+    "synthesis": 2.661,
+    "total": 27.781,
+    "agent_start_at": 1790417148.4080198
+  },
+  "transcript": "I found one product, \"desk Premium,\" which is 290 00 Does that sound good?",
+  "asr_chunks": [],
+  "actual_tool_calls": [
+    {
+      "function": "search_products",
+      "args": {
+        "query": "desk",
+        "max_price": 300
+      },
+      "timestamp_start": 30.61,
+      "timestamp_end": 30.61
+    }
+  ],
+  "status": "completed"
+}

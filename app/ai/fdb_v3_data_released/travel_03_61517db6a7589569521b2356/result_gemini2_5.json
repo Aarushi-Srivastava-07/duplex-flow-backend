@@ -1,0 +1,44 @@
+{
+  "pid": "61517db6a7589569521b2356",
+  "example_id": "travel_03",
+  "category": "travel_identity",
+  "title": "Flight Search with Fillers",
+  "provider": "gemini2_5",
+  "evaluated_at": "2026-09-27T15:38:26.762356",
+  "inference_time_s": 63.51,
+  "room_name": "eval-fbca8b0d",
+  "stream_start_time": 1790503714.1521547,
+  "input_transcript": "Um, yeah, well I've been looking for flights and I'm I was wondering if you could like maybe check what's available to London around uh August 20th for me.",
+  "input_asr_chunks": [],
+  "user_speech_end_rel": 41.45,
+  "latency": {
+    "input_duration_s": 43.2,
+    "output_duration_s": 58.2,
+    "first_speech_s": 32.15,
+    "user_speech_end_s": 41.45
+  },
+  "audio_agent_speech_start": 32.15,
+  "search_latency_breakdown": {
+    "room": "eval-fbca8b0d",
+    "tool": "Search Tool",
+    "reasoning": 0.022,
+    "execution": 0.231,
+    "synthesis": 3.235,
+    "total": 3.488,
+    "agent_start_at": 1790503747.1964104
+  },
+  "transcript": "Searching for flights to London on August 20th. I found one flight, FL123, for $450.",
+  "asr_chunks": [],
+  "actual_tool_calls": [
+    {
+      "function": "search_flights",
+      "args": {
+        "destination": "London",
+        "date": "August 20"
+      },
+      "timestamp_start": 29.58,
+      "timestamp_end": 29.81
+    }
+  ],
+  "status": "completed"
+}

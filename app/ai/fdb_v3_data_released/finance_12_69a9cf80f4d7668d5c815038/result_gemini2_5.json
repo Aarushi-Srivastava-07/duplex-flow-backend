@@ -1,0 +1,45 @@
+{
+  "pid": "69a9cf80f4d7668d5c815038",
+  "example_id": "finance_12",
+  "category": "finance_billing",
+  "title": "Amount Self-Correction",
+  "provider": "gemini2_5",
+  "evaluated_at": "2026-09-26T16:20:26.949909",
+  "inference_time_s": 68.3,
+  "room_name": "eval-d27a2bd2",
+  "stream_start_time": 1790419836.5285125,
+  "input_transcript": "Well, I want to calculate how much hundred euros would be in US dollars. Oh wait, uh, I was looking at the wrong invoice. It's actually $150, not 100. So 150 euros to US dollars.",
+  "input_asr_chunks": [],
+  "user_speech_end_rel": 14.3,
+  "latency": {
+    "input_duration_s": 46.14,
+    "output_duration_s": 61.14,
+    "first_speech_s": 28.95,
+    "user_speech_end_s": 14.3
+  },
+  "audio_agent_speech_start": 28.95,
+  "search_latency_breakdown": {
+    "room": "eval-d27a2bd2",
+    "tool": "Search Tool",
+    "reasoning": 16.066,
+    "execution": 0.0,
+    "synthesis": 2.191,
+    "total": 18.258,
+    "agent_start_at": 1790419863.3399732
+  },
+  "transcript": "150 euros is equivalent to 165.0 US dollars.",
+  "asr_chunks": [],
+  "actual_tool_calls": [
+    {
+      "function": "get_exchange_rate",
+      "args": {
+        "amount": 150.0,
+        "from_currency": "EUR",
+        "to_currency": "USD"
+      },
+      "timestamp_start": 24.62,
+      "timestamp_end": 24.62
+    }
+  ],
+  "status": "completed"
+}

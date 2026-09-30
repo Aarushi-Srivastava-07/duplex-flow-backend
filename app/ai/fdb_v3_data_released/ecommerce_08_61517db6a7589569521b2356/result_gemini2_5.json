@@ -1,0 +1,44 @@
+{
+  "pid": "61517db6a7589569521b2356",
+  "example_id": "ecommerce_08",
+  "category": "ecommerce_support",
+  "title": "Search with Pause",
+  "provider": "gemini2_5",
+  "evaluated_at": "2026-09-26T15:39:51.021384",
+  "inference_time_s": 64.48,
+  "room_name": "eval-01f2a927",
+  "stream_start_time": 1790417399.2337813,
+  "input_transcript": "Um, yeah, you know, uh, I want a mechanical keyboard and I'm trying to keep my budget under $200. Do you have anything like that?",
+  "input_asr_chunks": [],
+  "user_speech_end_rel": 41.35,
+  "latency": {
+    "input_duration_s": 43.44,
+    "output_duration_s": 58.44,
+    "first_speech_s": 23.8,
+    "user_speech_end_s": 41.35
+  },
+  "audio_agent_speech_start": 23.8,
+  "search_latency_breakdown": {
+    "room": "eval-01f2a927",
+    "tool": "Search Tool",
+    "reasoning": 13.272,
+    "execution": 0.0,
+    "synthesis": 1.792,
+    "total": 15.064,
+    "agent_start_at": 1790417420.2915986
+  },
+  "transcript": "I found one mechanical keyboard, the \"mechanical keyboard Premium,\" for $190.",
+  "asr_chunks": [],
+  "actual_tool_calls": [
+    {
+      "function": "search_products",
+      "args": {
+        "query": "mechanical keyboard",
+        "max_price": 200
+      },
+      "timestamp_start": 19.27,
+      "timestamp_end": 19.27
+    }
+  ],
+  "status": "completed"
+}

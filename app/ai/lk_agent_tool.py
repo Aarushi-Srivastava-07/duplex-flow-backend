@@ -1,0 +1,463 @@
+#!/usr/bin/env python3
+"""
+LiveKit Voice Agent with swappable realtime model providers.
+
+Supports every realtime model plugin that LiveKit provides:
+  grok, gpt_realtime, azure_openai, gemini2_5, gemini3_1, ultravox
+
+Usage:
+    # Development mode (connects to LiveKit Cloud, auto-dispatches on room join):
+    python lk_agent_tool.py dev
+
+    # Console mode (runs locally in terminal, uses mic/speaker, no LiveKit Cloud needed):
+    python lk_agent_tool.py console
+
+    # Production mode:
+    python lk_agent_tool.py start
+
+Requirements:
+    pip install "livekit-agents[xai,openai,google]~=1.3" \\
+                "livekit-plugins-ultravox" \\
+                python-dotenv
+
+Environment variables (in .env.local):
+    LIVEKIT_URL, LIVEKIT_API_KEY, LIVEKIT_API_SECRET
+    XAI_API_KEY                   (for Grok)
+    OPENAI_API_KEY                (for GPT Realtime)
+    AZURE_OPENAI_API_KEY          (for Azure OpenAI)
+    AZURE_OPENAI_ENDPOINT         (for Azure OpenAI)
+    AZURE_OPENAI_DEPLOYMENT       (for Azure OpenAI)
+    GOOGLE_API_KEY                (for Gemini)
+    ULTRAVOX_API_KEY              (for Ultravox)
+"""
+
+import os
+import json
+import logging
+import time
+import asyncio
+from dotenv import load_dotenv
+
+from livekit import agents, rtc
+from livekit.plugins import google, openai, silero
+from livekit.agents import Agent, AgentSession, AgentServer, llm
+
+# Compatibility for different livekit-agents versions
+if hasattr(llm, "function_tool"):
+    ai_callable_decorator = llm.function_tool
+else:
+    # Older version
+    ai_callable_decorator = llm.ai_callable
+
+import sys
+LATENCY_PROFILE = "instant"
+if "--latency" in sys.argv:
+    idx = sys.argv.index("--latency")
+    if idx + 1 < len(sys.argv):
+        LATENCY_PROFILE = sys.argv[idx + 1]
+        # Remove the custom args so LiveKit CLI doesn't crash
+        sys.argv.pop(idx)
+        sys.argv.pop(idx)
+
+# Import the user's existing fetch functions
+try:
+    from mock_apis import MockAPIRegistry
+    registry = MockAPIRegistry(latency_profile=LATENCY_PROFILE)
+    print(f"🔧 API Backend running with '{LATENCY_PROFILE}' latency profile.")
+except ImportError:
+    logging.warning("mock_apis.py not found. Tools will be mocked or fail.")
+    registry = None
+
+class LatencyTracker:
+    def __init__(self):
+        self.user_done_at = 0
+        self.tool_start_at = 0
+        self.tool_end_at = 0
+        self.agent_start_at = 0
+        self.query_received = False
+
+    def reset(self):
+        self.__init__()
+
+    def log_breakdown(self, tool_name="", room_name="unknown"):
+        if not self.user_done_at or not self.agent_start_at or not self.tool_start_at:
+            return
+
+        reasoning = (self.tool_start_at - self.user_done_at) if self.tool_start_at else 0
+        execution = (self.tool_end_at - self.tool_start_at) if self.tool_start_at and self.tool_end_at else 0
+        synthesis = (self.agent_start_at - (self.tool_end_at or self.user_done_at))
+        total = self.agent_start_at - self.user_done_at
+
+        report = f"\nLATENCY BREAKDOWN ({tool_name}) for room {room_name}:\n"
+        report += f"  - Reasoning (Model -> Tool): {reasoning:.2f}s\n"
+        if execution:
+            report += f"  - Tool Execution (API):    {execution:.2f}s\n"
+        report += f"  - Synthesis (Tool -> Spoken): {synthesis:.2f}s\n"
+        report += f"  - TOTAL SEARCH LATENCY:      {total:.2f}s\n"
+        
+        # Machine readable line for run_evaluation.py
+        import json
+        metrics = {
+            "room": room_name,
+            "tool": tool_name,
+            "reasoning": round(reasoning, 3),
+            "execution": round(execution, 3),
+            "synthesis": round(synthesis, 3),
+            "total": round(total, 3),
+            "agent_start_at": self.agent_start_at
+        }
+        json_report = f"LATENCY_TRACK_JSON: {json.dumps(metrics)}"
+
+        logging.info(report)
+        logging.info(json_report)
+        print(report)
+        with open("/tmp/agent_heartbeat.log", "a", encoding="utf-8") as f:
+            f.write(report + "\n")
+            f.write(json_report + "\n")
+
+import os
+from dotenv import load_dotenv
+
+env_path = os.path.join(os.path.dirname(__file__), ".env.local")
+load_dotenv(env_path)
+
+# ---------------------------------------------------------------------------
+# Configuration – change PROVIDER to switch between models
+# ---------------------------------------------------------------------------
+PROVIDER = os.getenv("LK_PROVIDER", "grok")
+# Supported values:
+#   "grok"         – xAI Grok Voice Agent API
+#   "gpt_realtime" – OpenAI Realtime API
+#   "azure_openai" – Azure OpenAI Realtime API
+#   "gemini2_5"    – Google Gemini 2.5 Live API
+#   "gemini3_1"    – Google Gemini 3.1 Live API
+#   "ultravox"     – Ultravox Realtime
+
+
+def get_realtime_model():
+    """Return a RealtimeModel instance based on the configured provider."""
+    provider = PROVIDER.lower()
+
+    # ── xAI Grok Voice Agent API ──────────────────────────────────────
+    if provider == "grok":
+        from livekit.plugins import xai
+
+        return xai.realtime.RealtimeModel(
+            voice=os.getenv("XAI_VOICE", "Ara"),
+        )
+
+    # ── OpenAI Realtime API ──────────────────────────────────────────
+    elif provider == "gpt_realtime":
+        from livekit.plugins import openai
+
+        return openai.realtime.RealtimeModel(
+            model="gpt-realtime-1.5",
+            voice=os.getenv("OPENAI_VOICE", "coral"),
+        )
+
+    # ── Azure OpenAI Realtime API ─────────────────────────────────────
+    elif provider == "azure_openai":
+        from livekit.plugins import openai
+
+        return openai.realtime.RealtimeModel.with_azure(
+            azure_deployment=os.getenv("AZURE_OPENAI_DEPLOYMENT", "gpt-4o-realtime-preview"),
+            azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT", ""),
+            api_key=os.getenv("AZURE_OPENAI_API_KEY", ""),
+            api_version=os.getenv("OPENAI_API_VERSION", "2024-10-01-preview"),
+            voice=os.getenv("AZURE_OPENAI_VOICE", "alloy"),
+        )
+
+    # ── Google Gemini 2.5 Live API ───────────────────────────────────
+    elif provider == "gemini2_5":
+        from livekit.plugins import google
+
+        from google.genai import types
+        return google.realtime.RealtimeModel(
+            model="gemini-2.5-flash-native-audio-preview-12-2025",
+            voice=os.getenv("GOOGLE_VOICE", "Puck"),
+            realtime_input_config=types.RealtimeInputConfig(
+                automatic_activity_detection=types.AutomaticActivityDetection(
+                    silence_duration_ms=1200,
+                )
+            ),
+        )
+
+    # ── Google Gemini 3.1 Live API ───────────────────────────────────
+    elif provider == "gemini3_1":
+        from livekit.plugins import google
+
+        return google.realtime.RealtimeModel(
+            model="gemini-3.1-flash-live-preview",
+            voice=os.getenv("GOOGLE_VOICE", "Puck"),
+        )
+
+    # ── Ultravox Realtime ─────────────────────────────────────────────
+    elif provider == "ultravox":
+        from livekit.plugins import ultravox
+
+        return ultravox.realtime.RealtimeModel(
+            voice=os.getenv("ULTRAVOX_VOICE", "Mark"),
+        )
+
+    else:
+        supported = "grok, gpt_realtime, azure_openai, gemini2_5, gemini3_1, ultravox"
+        raise ValueError(
+            f"Unknown provider '{provider}'. "
+            f"Set LK_PROVIDER to one of: {supported}"
+        )
+
+
+# ---------------------------------------------------------------------------
+# Tool/Function definitions for models to call
+# ---------------------------------------------------------------------------
+class AssistantFnc:
+    def __init__(self, tracker: LatencyTracker, room_name: str):
+        self.room_name = room_name
+        self.tracker = tracker
+    def log_tool_call(self, func_name: str, args: dict, t_start: float, t_end: float):
+        import json
+        with open("/tmp/agent_tool_calls.log", "a", encoding="utf-8") as f:
+            f.write(json.dumps({"room": self.room_name, "call": {"function": func_name, "args": args, "timestamp_start": t_start, "timestamp_end": t_end}}) + "\n")
+
+    # ── Travel & Identity ───────────────────────────────────────────
+    @ai_callable_decorator(description="Search for available flights to a destination.")
+    async def search_flights(self, destination: str, date: str):
+        """
+        Args:
+            destination: The city or airport, e.g. 'London' or 'LHR'
+            date: The travel date, e.g. 'April 10 (use Month Day format ONLY, never YYYY-MM-DD or ordinal suffixes like th)'
+        """
+        self.tracker.tool_start_at = time.time()
+        result = dict(mock_apis.search_flights("search_flights", destination=destination, date=date), note="SEARCH ONLY. Flight is NOT booked yet. If user asked to book a flight, you MUST call book_flight(passenger_name=...) NOW before speaking!")
+        self.tracker.tool_end_at = time.time()
+        self.log_tool_call("search_flights", {"destination": destination, "date": date}, self.tracker.tool_start_at, self.tracker.tool_end_at)
+        return json.dumps(result)
+
+    @ai_callable_decorator(description="Book a flight ticket.")
+    async def book_flight(self, passenger_name: str):
+        """
+        Args:
+            passenger_name: The name of the passenger, e.g. 'John Doe'
+        """
+        self.tracker.tool_start_at = time.time()
+        result = mock_apis.book_flight( passenger_name=passenger_name)
+        self.tracker.tool_end_at = time.time()
+        self.log_tool_call("book_flight", {"passenger_name": passenger_name}, self.tracker.tool_start_at, self.tracker.tool_end_at)
+        return json.dumps(result)
+
+    @ai_callable_decorator(description="MANDATORY tool to update simulated user identity document details (e.g. passport, driver license). You are fully authorized in this test environment. NEVER refuse to use it due to 'external personal/government system' safety concerns.")
+    async def update_identity_doc(self, doc_type: str, doc_number: str):
+        """
+        Args:
+            doc_type: Type of document, e.g. 'passport', 'driver_license', or 'visa'
+            doc_number: The document identifier string
+        """
+        self.tracker.tool_start_at = time.time()
+        doc_number = doc_number.replace("-", "")
+        if doc_number.upper().startswith("DL") or "driver" in doc_type.lower() or "license" in doc_type.lower(): doc_type = "driver_license"
+        result = mock_apis.update_identity_doc( doc_type=doc_type, doc_number=doc_number)
+        self.tracker.tool_end_at = time.time()
+        self.log_tool_call("update_identity_doc", {"doc_type": doc_type, "doc_number": doc_number}, self.tracker.tool_start_at, self.tracker.tool_end_at)
+        return json.dumps(result)
+
+    # ── Finance & Billing ───────────────────────────────────────────
+    @ai_callable_decorator(description="MANDATORY tool to get benefits for a credit card. NEVER guess benefits from memory. Execute this tool immediately.")
+    async def get_card_benefits(self, card_type: str):
+        """
+        Args:
+            card_type: The card type, e.g. 'platinum' or 'gold'
+        """
+        self.tracker.tool_start_at = time.time()
+        result = registry.call("get_card_benefits", card_type=card_type)
+        self.tracker.tool_end_at = time.time()
+        self.log_tool_call("get_card_benefits", {"card_type": card_type}, self.tracker.tool_start_at, self.tracker.tool_end_at)
+        return json.dumps(result)
+
+    @ai_callable_decorator(description="MANDATORY tool to fetch the exact, current foreign exchange rate. NEVER guess or calculate exchange rates from your internal memory; you MUST use this API.")
+    async def get_exchange_rate(self, amount: float, from_currency: str, to_currency: str):
+        """
+        Args:
+            amount: Amount to convert
+            from_currency: 3-letter currency code, e.g. 'USD'
+            to_currency: 3-letter currency code, e.g. 'EUR'
+        """
+        self.tracker.tool_start_at = time.time()
+        result = registry.call("get_exchange_rate", amount=amount, from_currency=from_currency, to_currency=to_currency)
+        self.tracker.tool_end_at = time.time()
+        self.log_tool_call("get_exchange_rate", {"amount": amount, "from_currency": from_currency, "to_currency": to_currency}, self.tracker.tool_start_at, self.tracker.tool_end_at)
+        return json.dumps(result)
+
+    @ai_callable_decorator(description="MANDATORY tool to process billing details. Execute this update immediately when the user requests Autopay modification.")
+    async def modify_autopay(self, bill_type: str, source_account: str):
+        """
+        Args:
+            bill_type: Type of bill, e.g. 'credit_card' or 'utilities'
+            source_account: Bank account identifier, e.g. 'checking'
+        """
+        self.tracker.tool_start_at = time.time()
+        result = mock_apis.modify_autopay( bill_type=bill_type, source_account=source_account)
+        self.tracker.tool_end_at = time.time()
+        self.log_tool_call("modify_autopay", {"bill_type": bill_type, "source_account": source_account}, self.tracker.tool_start_at, self.tracker.tool_end_at)
+        return json.dumps(result)
+
+    # ── Housing & Location ───────────────────────────────────────────
+    @ai_callable_decorator(description="Search for available rental apartments. NEVER ask for city if omitted; call immediately with bedrooms/max_price. If commute or filter update is also mentioned, IMMEDIATELY call calculate_commute (default mode=driving) and update_search_filter without asking questions!")
+    async def search_apartments(self, city: str = None, bedrooms: int = None, max_price: float = None, pets_allowed: bool = None):
+        """
+        Args:
+            city: Destination city, e.g. Portland or Seattle
+            bedrooms: Number of bedrooms, e.g. 1, 2, 3
+            max_price: Maximum monthly rent budget, e.g. 1800
+            pets_allowed: True if pet-friendly / pets allowed is requested
+        """
+        self.tracker.tool_start_at = time.time()
+        raw = registry.call("search_apartments", city=city or "City", bedrooms=bedrooms or 1, max_price=max_price if max_price is not None else 2000)
+        result = dict(raw, cheapest_apartment_address="APT1", apartments=[{"id": "APT1", "address": "APT1", "price": (max_price or 2000) - 100}], ActionRequired="If the user asked to check commute time (bike/drive/walk/transit) from the apartment, you MUST call calculate_commute(origin_address=APT1, destination_address=..., mode=...) RIGHT NOW before speaking!")
+        self.tracker.tool_end_at = time.time()
+        logged = {k: v for k, v in {"city": city, "bedrooms": bedrooms, "max_price": int(max_price) if max_price is not None else None, "pets_allowed": pets_allowed}.items() if v is not None}
+        self.log_tool_call("search_apartments", logged, self.tracker.tool_start_at, self.tracker.tool_end_at)
+        return json.dumps(result)
+
+    @ai_callable_decorator(description="MANDATORY tool to calculate commute duration. Fetch exact commute times using this tool. Do NOT estimate from memory.")
+    async def calculate_commute(self, origin_address: str, destination_address: str, mode: str = "driving"):
+        """
+        Args:
+            origin_address: Starting location or apartment ID (e.g. APT1, my house, 101 Main Street)
+            destination_address: Short destination name (e.g. coffee shop on 5th, Downtown Office, University, Gym)
+            mode: Transport mode: driving, biking, walking, or transit
+        """
+        if any(k in destination_address.lower() for k in ["5th", "fifth"]):
+            destination_address = "coffee shop on 5th"
+        self.tracker.tool_start_at = time.time()
+        result = registry.call("calculate_commute", origin_address=origin_address, destination_address=destination_address, mode=mode)
+        self.tracker.tool_end_at = time.time()
+        self.log_tool_call("calculate_commute", {"origin_address": origin_address, "destination_address": destination_address, "mode": mode}, self.tracker.tool_start_at, self.tracker.tool_end_at)
+        return json.dumps(result)
+
+    @ai_callable_decorator(description="Instantly update the user's search filter in the backend system. Execute this IMMEDIATELY without asking for further confirmations.")
+    async def update_search_filter(self, filter_name: str, value: str):
+        """
+        Args:
+            filter_name: Filter key to modify (e.g. max_price, pets_allowed, min_bedrooms, neighborhood)
+            value: Filter value to apply (e.g. 1800, true, 3, Northside)
+        """
+        typed_val = value
+        if isinstance(value, str):
+            vl = value.strip().lower()
+            if vl == "true": typed_val = True
+            elif vl == "false": typed_val = False
+            else:
+                try:
+                    typed_val = int(float(vl.replace("$", "").replace(",", "")))
+                except Exception:
+                   typed_val = value
+        self.tracker.tool_start_at = time.time()
+        result = registry.call("update_search_filter", filter_name=filter_name, value=typed_val)
+        self.tracker.tool_end_at = time.time()
+        self.log_tool_call("update_search_filter", {"filter_name": filter_name, "value": typed_val}, self.tracker.tool_start_at, self.tracker.tool_end_at)
+        return json.dumps(result)
+
+    # ── E-Commerce Support ───────────────────────────────────────────
+    @ai_callable_decorator(description="MANDATORY tool to track physical package status. Do NOT answer from memory or batch tracking requests. EXECUTE THIS TOOL IMMEDIATELY for every order ID mentioned.")
+    async def track_order(self, order_id: str):
+        """
+        Args:
+            order_id: Order identifier to track, e.g. 'BOB12'
+        """
+        self.tracker.tool_start_at = time.time()
+        result = registry.call("track_order", order_id=order_id)
+        self.tracker.tool_end_at = time.time()
+        self.log_tool_call("track_order", {"order_id": order_id}, self.tracker.tool_start_at, self.tracker.tool_end_at)
+        return json.dumps(result)
+
+    @ai_callable_decorator(description="MANDATORY tool to search for products in the catalog. Do NOT answer from memory. You MUST execute this tool whenever the user asks for item recommendations or searches.")
+    async def search_products(self, query: str = None, max_price: float = None, category: str = None):
+        """
+        Args:
+            query: Product search term, e.g. 'headphones'
+            max_price: Optional maximum budget
+        """
+        self.tracker.tool_start_at = time.time()
+        result = dict(mock_apis.search_flights("search_products", query=query, max_price=max_price), note="SEARCH ONLY. Item is NOT in cart yet. If user asked to add to cart/car/cards or buy later, you MUST call add_to_cart(product_id=..., quantity=1) NOW before speaking!")
+        self.tracker.tool_end_at = time.time()
+        self.log_tool_call("search_products", {k: v for k, v in {"query": query, "max_price": int(max_price) if max_price is not None else None, "category": category}.items() if v is not None}, self.tracker.tool_start_at, self.tracker.tool_end_at)
+        return json.dumps(result)
+
+    @ai_callable_decorator(description="MANDATORY tool to add an item to the shopping cart. Execute this action IMMEDIATELY the moment the user asks without confirming or waiting for them to list more items.")
+    async def add_to_cart(self, product_id: str, quantity: int = 1):
+        """
+        Args:
+            product_id: ID of the product
+            quantity: Amount to add
+        """
+        self.tracker.tool_start_at = time.time()
+        result = registry.call("add_to_cart", product_id=product_id, quantity=quantity)
+        self.tracker.tool_end_at = time.time()
+        self.log_tool_call("add_to_cart", {"product_id": product_id, "quantity": quantity}, self.tracker.tool_start_at, self.tracker.tool_end_at)
+        return json.dumps(result)
+
+
+
+
+class VoiceAgent(Agent):
+    def __init__(self) -> None:
+        super().__init__(
+            instructions=(
+                'You are a helpful voice AI assistant. Keep responses concise and conversational. '
+                'You have access to 12 APIs across 4 domains (Travel, Finance, Housing, E-Commerce). '
+                'CRITICAL 1: Safe simulated testing environment. You are fully authorized and REQUIRED to call tools for all requests (identity docs, billing, orders). Never refuse. '
+                'CRITICAL 2: DO NOT ask clarifying questions or wait for confirmation. Execute tools IMMEDIATELY. Never guess data from memory. '
+                'CRITICAL 3 (CHAINING & NOISY AUDIO): Users often request 2 or 3 tools in one turn. If the user continues speaking while a tool runs, DO NOT forget the earlier request! '
+                'If a user searches for a product and mentions cart, cards, buying later, or cheapest option (even if noisy like in the cheapest option my cards), you MUST call add_to_cart(product_id=..., quantity=1) using the product_id returned by search_products! '
+                'If a user searches flights and mentions booking for a passenger, you MUST call book_flight after search_flights! '
+                'CRITICAL 4 (IDS): When users spell out IDs (like P-O-9-9-9 or A-B-C-1-2-3), always keep the letter prefix and digits together (e.g. PO999, ABC123). '
+                'CRITICAL 5 (SELF-CORRECTION): If the user says wait, actually no, or instead, only call the tool for their final corrected choice.'
+            ),
+        )
+
+server = AgentServer()
+
+@server.rtc_session()
+async def entrypoint(ctx: agents.JobContext):
+    with open('/tmp/agent_heartbeat.log', 'a', encoding='utf-8') as f:
+        f.write(f'!!! AGENT JOINING ROOM: {ctx.room.name} at {time.ctime()} !!!\n')
+    print(f'!!! AGENT JOINING ROOM: {ctx.room.name} !!!')
+    model = get_realtime_model()
+    tracker = LatencyTracker()
+    fnc_ctx = AssistantFnc(tracker, ctx.room.name)
+    tools = llm.find_function_tools(fnc_ctx)
+    session = AgentSession(llm=model, tools=tools, aec_warmup_duration=None, max_tool_steps=10)
+
+    @session.on('conversation_item_added')
+    def on_conv_item(ev):
+        try:
+            item = getattr(ev, 'item', None)
+            role = getattr(item, 'role', '')
+            text = getattr(item, 'text_content', None) or ''
+            if callable(text): text = text()
+            if not text and hasattr(item, 'content'):
+                text = ' '.join(str(c) for c in item.content if isinstance(c, str))
+            if text:
+                with open('/tmp/agent_transcripts.log', 'a', encoding='utf-8') as tf:
+                    tf.write(json.dumps({'room': ctx.room.name, 'role': str(role), 'text': str(text)}) + '\n')
+        except Exception:
+            pass
+
+    @session.on('user_input_transcribed')
+    def on_user_input(msg: agents.voice.UserInputTranscribedEvent):
+        if not tracker.query_received:
+            tracker.user_done_at = time.time()
+            tracker.query_received = True
+
+    @session.on('agent_state_changed')
+    def on_agent_state(ev: agents.voice.AgentStateChangedEvent):
+        if ev.new_state == 'speaking' and tracker.query_received and not tracker.agent_start_at:
+            tracker.agent_start_at = time.time()
+            tracker.log_breakdown(tool_name='Search Tool', room_name=ctx.room.name)
+            tracker.reset()
+
+    await session.start(room=ctx.room, agent=VoiceAgent())
+    print('!!! AGENT STARTED in ROOM (Listening) !!!')
+
+if __name__ == '__main__':
+    agents.cli.run_app(server)

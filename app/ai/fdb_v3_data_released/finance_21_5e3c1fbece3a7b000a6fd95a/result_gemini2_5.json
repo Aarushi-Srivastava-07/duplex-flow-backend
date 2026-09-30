@@ -1,0 +1,53 @@
+{
+  "pid": "5e3c1fbece3a7b000a6fd95a",
+  "example_id": "finance_21",
+  "category": "finance_billing",
+  "title": "Hesitant Multi-Task",
+  "provider": "gemini2_5",
+  "evaluated_at": "2026-09-26T16:28:31.955428",
+  "inference_time_s": 70.75,
+  "room_name": "eval-e506773e",
+  "stream_start_time": 1790420321.3166447,
+  "input_transcript": "All right, so first, um, I want to know what the um benefits are for the gold card because I'm comparing a few options. And then I also need to convert um $500 US dollars to yen because I'm buying something from Japan.",
+  "input_asr_chunks": [],
+  "user_speech_end_rel": 16.65,
+  "latency": {
+    "input_duration_s": 48.9,
+    "output_duration_s": 63.9,
+    "first_speech_s": 30.2,
+    "user_speech_end_s": 16.65
+  },
+  "audio_agent_speech_start": 30.2,
+  "search_latency_breakdown": {
+    "room": "eval-e506773e",
+    "tool": "Search Tool",
+    "reasoning": 21.772,
+    "execution": 0.0,
+    "synthesis": 1.803,
+    "total": 23.576,
+    "agent_start_at": 1790420349.4319813
+  },
+  "transcript": "The gold card offers 2% Cashback and No Foreign Transaction Fee. Also, 500 USD is equivalent to 450 Yen currently.",
+  "asr_chunks": [],
+  "actual_tool_calls": [
+    {
+      "function": "get_card_benefits",
+      "args": {
+        "card_type": "gold"
+      },
+      "timestamp_start": 26.2,
+      "timestamp_end": 26.2
+    },
+    {
+      "function": "get_exchange_rate",
+      "args": {
+        "amount": 500.0,
+        "from_currency": "USD",
+        "to_currency": "JPY"
+      },
+      "timestamp_start": 26.31,
+      "timestamp_end": 26.31
+    }
+  ],
+  "status": "completed"
+}

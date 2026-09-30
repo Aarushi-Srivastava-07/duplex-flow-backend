@@ -1,0 +1,63 @@
+{
+  "pid": "66f59c766e7e22e1f90d08f6",
+  "example_id": "housing_25",
+  "category": "housing_location",
+  "title": "Full Chain: Filters + Search + Correction",
+  "provider": "gemini2_5",
+  "evaluated_at": "2026-09-27T16:05:48.243935",
+  "inference_time_s": 69.64,
+  "room_name": "eval-536a1e71",
+  "stream_start_time": 1790505353.9637172,
+  "input_transcript": "You know, you know, all right, first set the filter so pets are allowed and set the max price to 3,000. Then search replaces in San Francisco. Wait, actually change the max price to 3,500 instead. San Francisco is expensive. So I need more room in the budget.",
+  "input_asr_chunks": [],
+  "user_speech_end_rel": 21.35,
+  "latency": {
+    "input_duration_s": 51.48,
+    "output_duration_s": 66.48,
+    "first_speech_s": 45.85,
+    "user_speech_end_s": 21.35
+  },
+  "audio_agent_speech_start": 45.85,
+  "search_latency_breakdown": {
+    "room": "eval-536a1e71",
+    "tool": "Search Tool",
+    "reasoning": 35.553,
+    "execution": 0.783,
+    "synthesis": 1.388,
+    "total": 37.725,
+    "agent_start_at": 1790505396.3642097
+  },
+  "transcript": "OK. I've updated the filters and am now searching for apartments in San Francisco with a maximum price of $3500, allowing pets. 1 result was found: APT1 for $3400.",
+  "asr_chunks": [],
+  "actual_tool_calls": [
+    {
+      "function": "update_search_filter",
+      "args": {
+        "filter_name": "pets_allowed",
+        "value": true
+      },
+      "timestamp_start": 39.78,
+      "timestamp_end": 39.84
+    },
+    {
+      "function": "update_search_filter",
+      "args": {
+        "filter_name": "max_price",
+        "value": 3500
+      },
+      "timestamp_start": 40.05,
+      "timestamp_end": 40.14
+    },
+    {
+      "function": "search_apartments",
+      "args": {
+        "city": "San Francisco",
+        "max_price": 3500,
+        "pets_allowed": true
+      },
+      "timestamp_start": 40.23,
+      "timestamp_end": 41.01
+    }
+  ],
+  "status": "completed"
+}

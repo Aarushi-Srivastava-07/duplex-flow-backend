@@ -1,0 +1,62 @@
+{
+  "pid": "6998abd731d2ec50d067d5bd",
+  "example_id": "finance_18",
+  "category": "finance_billing",
+  "title": "Exchange + Autopay + Benefits Chain",
+  "provider": "gemini2_5",
+  "evaluated_at": "2026-09-26T13:24:06.455647",
+  "inference_time_s": 97.59,
+  "room_name": "eval-1e0bc186",
+  "stream_start_time": 1790409268.581961,
+  "input_transcript": "Um so right so first um I need to know how much thousand years dollars would be then I want to change my credit card so it pulls from the saving system and finally can you tell me what kind of benefit premium card is",
+  "input_asr_chunks": [],
+  "user_speech_end_rel": 49.55,
+  "latency": {
+    "input_duration_s": 49.797,
+    "output_duration_s": 49.797,
+    "first_speech_s": 45.25,
+    "user_speech_end_s": 49.55
+  },
+  "audio_agent_speech_start": 45.25,
+  "search_latency_breakdown": {
+    "room": "eval-1e0bc186",
+    "tool": "Search Tool",
+    "reasoning": 36.541,
+    "execution": 0.0,
+    "synthesis": 1.61,
+    "total": 38.151,
+    "agent_start_at": 1790409312.5371542
+  },
+  "transcript": "1000 USD is 900 EUR. I have updated your credit card autopay to pull from your savings account, and the premium card offers 2% Cashback and No Foreign Transaction Fee.",
+  "asr_chunks": [],
+  "actual_tool_calls": [
+    {
+      "function": "get_exchange_rate",
+      "args": {
+        "amount": 1000.0,
+        "from_currency": "USD",
+        "to_currency": "EUR"
+      },
+      "timestamp_start": 42.04,
+      "timestamp_end": 42.04
+    },
+    {
+      "function": "modify_autopay",
+      "args": {
+        "bill_type": "credit_card",
+        "source_account": "savings"
+      },
+      "timestamp_start": 42.25,
+      "timestamp_end": 42.25
+    },
+    {
+      "function": "get_card_benefits",
+      "args": {
+        "card_type": "premium"
+      },
+      "timestamp_start": 42.34,
+      "timestamp_end": 42.34
+    }
+  ],
+  "status": "completed"
+}

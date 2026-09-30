@@ -1,0 +1,45 @@
+{
+  "pid": "69a9cf80f4d7668d5c815038",
+  "example_id": "finance_01",
+  "category": "finance_billing",
+  "title": "Simple Currency Exchange",
+  "provider": "gemini2_5",
+  "evaluated_at": "2026-09-26T16:05:36.690745",
+  "inference_time_s": 64.14,
+  "room_name": "eval-023cfee5",
+  "stream_start_time": 1790418946.8378513,
+  "input_transcript": "Like I'm trying to figure out how much $500 would be if I converted it to e check that for me?",
+  "input_asr_chunks": [],
+  "user_speech_end_rel": 9.45,
+  "latency": {
+    "input_duration_s": 40.98,
+    "output_duration_s": 55.98,
+    "first_speech_s": 19.9,
+    "user_speech_end_s": 9.45
+  },
+  "audio_agent_speech_start": 19.9,
+  "search_latency_breakdown": {
+    "room": "eval-023cfee5",
+    "tool": "Search Tool",
+    "reasoning": 10.715,
+    "execution": 0.0,
+    "synthesis": 2.227,
+    "total": 12.942,
+    "agent_start_at": 1790418964.4670627
+  },
+  "transcript": "500 USD is currently 450.0 EUR.",
+  "asr_chunks": [],
+  "actual_tool_calls": [
+    {
+      "function": "get_exchange_rate",
+      "args": {
+        "amount": 500.0,
+        "from_currency": "USD",
+        "to_currency": "EUR"
+      },
+      "timestamp_start": 15.4,
+      "timestamp_end": 15.4
+    }
+  ],
+  "status": "completed"
+}

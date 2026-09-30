@@ -1,0 +1,44 @@
+{
+  "pid": "5f4a4da1575d605c43bef871",
+  "example_id": "ecommerce_02",
+  "category": "ecommerce_support",
+  "title": "Simple Product Search",
+  "provider": "gemini2_5",
+  "evaluated_at": "2026-09-26T15:32:47.732410",
+  "inference_time_s": 69.95,
+  "room_name": "eval-8d2b628e",
+  "stream_start_time": 1790416981.4338803,
+  "input_transcript": "I'm looking for a pair of wireless headphones and I'd like um to track it under $100 if possible. What do you have?",
+  "input_asr_chunks": [],
+  "user_speech_end_rel": 12.2,
+  "latency": {
+    "input_duration_s": 43.336,
+    "output_duration_s": 58.336,
+    "first_speech_s": 25.55,
+    "user_speech_end_s": 12.2
+  },
+  "audio_agent_speech_start": 25.55,
+  "search_latency_breakdown": {
+    "room": "eval-8d2b628e",
+    "tool": "Search Tool",
+    "reasoning": 12.805,
+    "execution": 0.0,
+    "synthesis": 2.038,
+    "total": 14.843,
+    "agent_start_at": 1790417003.099189
+  },
+  "transcript": "I found \"wireless headphones Premium\" for $90.00.",
+  "asr_chunks": [],
+  "actual_tool_calls": [
+    {
+      "function": "search_products",
+      "args": {
+        "query": "wireless headphones",
+        "max_price": 100
+      },
+      "timestamp_start": 19.63,
+      "timestamp_end": 19.63
+    }
+  ],
+  "status": "completed"
+}

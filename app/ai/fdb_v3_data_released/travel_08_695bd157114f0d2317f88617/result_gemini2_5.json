@@ -1,0 +1,44 @@
+{
+  "pid": "695bd157114f0d2317f88617",
+  "example_id": "travel_08",
+  "category": "travel_identity",
+  "title": "False Start Flight Search",
+  "provider": "gemini2_5",
+  "evaluated_at": "2026-09-27T15:42:37.625715",
+  "inference_time_s": 62.32,
+  "room_name": "eval-6698192c",
+  "stream_start_time": 1790503964.229265,
+  "input_transcript": "I was going to ask about hotel options, but never mind for now on that. Can you just find me flights to Seattle? November 1st instead?",
+  "input_asr_chunks": [],
+  "user_speech_end_rel": 10.25,
+  "latency": {
+    "input_duration_s": 43.08,
+    "output_duration_s": 58.08,
+    "first_speech_s": 22.85,
+    "user_speech_end_s": 10.25
+  },
+  "audio_agent_speech_start": 22.85,
+  "search_latency_breakdown": {
+    "room": "eval-6698192c",
+    "tool": "Search Tool",
+    "reasoning": 13.119,
+    "execution": 0.504,
+    "synthesis": 1.182,
+    "total": 14.804,
+    "agent_start_at": 1790503983.5459158
+  },
+  "transcript": "I found one flight to Seattle on November 1st for $450.",
+  "asr_chunks": [],
+  "actual_tool_calls": [
+    {
+      "function": "search_flights",
+      "args": {
+        "destination": "Seattle",
+        "date": "November 1"
+      },
+      "timestamp_start": 17.63,
+      "timestamp_end": 18.13
+    }
+  ],
+  "status": "completed"
+}

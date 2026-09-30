@@ -1,0 +1,45 @@
+{
+  "pid": "62a885d5b6af18b3d4579e1b",
+  "example_id": "housing_01",
+  "category": "housing_location",
+  "title": "Simple Apartment Search",
+  "provider": "gemini2_5",
+  "evaluated_at": "2026-09-26T16:32:12.964962",
+  "inference_time_s": 61.12,
+  "room_name": "eval-21a01cdf",
+  "stream_start_time": 1790420541.4405167,
+  "input_transcript": "You know, uh um, I'm trying to find a two bedroom apartment in Seattle and I'd like to keep the rent under 2,500 a month if possible. Could you see what's available?",
+  "input_asr_chunks": [],
+  "user_speech_end_rel": 33.1,
+  "latency": {
+    "input_duration_s": 40.32,
+    "output_duration_s": 55.32,
+    "first_speech_s": 19.25,
+    "user_speech_end_s": 33.1
+  },
+  "audio_agent_speech_start": 19.25,
+  "search_latency_breakdown": {
+    "room": "eval-21a01cdf",
+    "tool": "Search Tool",
+    "reasoning": 0.094,
+    "execution": 0.518,
+    "synthesis": 4.117,
+    "total": 4.728,
+    "agent_start_at": 1790420563.9135725
+  },
+  "transcript": "Searching for 2-bedroom apartments in Seattle with a max price of 2500. I found one apartment available at APT1 for $2400 a month.",
+  "asr_chunks": [],
+  "actual_tool_calls": [
+    {
+      "function": "search_apartments",
+      "args": {
+        "city": "Seattle",
+        "bedrooms": 2,
+        "max_price": 2500
+      },
+      "timestamp_start": 17.84,
+      "timestamp_end": 18.36
+    }
+  ],
+  "status": "completed"
+}

@@ -1,0 +1,25 @@
+{
+  "pid": "66c4f3cb14cbfc4db836bd4e",
+  "example_id": "housing_21",
+  "category": "housing_location",
+  "title": "Multi-Correction Across Statements",
+  "provider": "gemini2_5",
+  "evaluated_at": "2026-09-26T16:55:57.501399",
+  "inference_time_s": 72.32,
+  "room_name": "eval-c429c858",
+  "stream_start_time": 1790421967.8227713,
+  "input_transcript": "So uh well, so you know, uh I I want to search for a place with two bedrooms. Wait, actually, I mean, I meant three bedrooms. We decided we need a home office. Also check the transit time to the train station actually I'd rather walk. So make that walking time.",
+  "input_asr_chunks": [],
+  "user_speech_end_rel": 19.1,
+  "latency": {
+    "input_duration_s": 49.725,
+    "output_duration_s": 64.725,
+    "first_speech_s": 30.55,
+    "user_speech_end_s": 19.1
+  },
+  "audio_agent_speech_start": 30.55,
+  "transcript": "Sure, I can help with that. What city are you looking in, and what is the specific train station you'd like to calculate the walking time to?",
+  "asr_chunks": [],
+  "actual_tool_calls": [],
+  "status": "completed"
+}

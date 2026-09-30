@@ -1,0 +1,44 @@
+{
+  "pid": "5ff07b5ee7a1d23e719e421e",
+  "example_id": "finance_07",
+  "category": "finance_billing",
+  "title": "False Start then Autopay",
+  "provider": "gemini2_5",
+  "evaluated_at": "2026-09-26T16:12:25.884861",
+  "inference_time_s": 69.6,
+  "room_name": "eval-751e7e08",
+  "stream_start_time": 1790419355.0168378,
+  "input_transcript": "Uh, I was going um to ask about my account balance but uh, never mind. I'll check online later. For now, could you change the mortgage autopay so it pulls from my savings account.",
+  "input_asr_chunks": [],
+  "user_speech_end_rel": 16.6,
+  "latency": {
+    "input_duration_s": 47.64,
+    "output_duration_s": 62.64,
+    "first_speech_s": 40.15,
+    "user_speech_end_s": 16.6
+  },
+  "audio_agent_speech_start": 40.15,
+  "search_latency_breakdown": {
+    "room": "eval-751e7e08",
+    "tool": "Search Tool",
+    "reasoning": 28.908,
+    "execution": 0.0,
+    "synthesis": 1.615,
+    "total": 30.523,
+    "agent_start_at": 1790419392.6404874
+  },
+  "transcript": "Mortgage autopay has been successfully updated to pull from your savings account.",
+  "asr_chunks": [],
+  "actual_tool_calls": [
+    {
+      "function": "modify_autopay",
+      "args": {
+        "bill_type": "mortgage",
+        "source_account": "savings"
+      },
+      "timestamp_start": 36.01,
+      "timestamp_end": 36.01
+    }
+  ],
+  "status": "completed"
+}

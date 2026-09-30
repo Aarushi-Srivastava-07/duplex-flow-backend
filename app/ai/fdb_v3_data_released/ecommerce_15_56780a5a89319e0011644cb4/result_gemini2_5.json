@@ -1,0 +1,43 @@
+{
+  "pid": "56780a5a89319e0011644cb4",
+  "example_id": "ecommerce_15",
+  "category": "ecommerce_support",
+  "title": "Order Track with Pause and Filler",
+  "provider": "gemini2_5",
+  "evaluated_at": "2026-09-26T15:50:28.533468",
+  "inference_time_s": 70.56,
+  "room_name": "eval-37a48aac",
+  "stream_start_time": 1790418038.4826958,
+  "input_transcript": "um, so well can can you uh track order BOB 12 for me? Um, I ordered it a few days ago and it should be arriving soon, uh, but I just wanted to make sure.",
+  "input_asr_chunks": [],
+  "user_speech_end_rel": 27.75,
+  "latency": {
+    "input_duration_s": 48.24,
+    "output_duration_s": 63.24,
+    "first_speech_s": 28.3,
+    "user_speech_end_s": 27.75
+  },
+  "audio_agent_speech_start": 28.3,
+  "search_latency_breakdown": {
+    "room": "eval-37a48aac",
+    "tool": "Search Tool",
+    "reasoning": 19.211,
+    "execution": 0.0,
+    "synthesis": 1.856,
+    "total": 21.067,
+    "agent_start_at": 1790418066.2394829
+  },
+  "transcript": "Your order BOB12 is currently out for delivery.",
+  "asr_chunks": [],
+  "actual_tool_calls": [
+    {
+      "function": "track_order",
+      "args": {
+        "order_id": "BOB12"
+      },
+      "timestamp_start": 25.9,
+      "timestamp_end": 25.9
+    }
+  ],
+  "status": "completed"
+}

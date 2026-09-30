@@ -1,0 +1,44 @@
+{
+  "pid": "62a885d5b6af18b3d4579e1b",
+  "example_id": "housing_20",
+  "category": "housing_location",
+  "title": "Conditional Search Logic",
+  "provider": "gemini2_5",
+  "evaluated_at": "2026-09-27T16:04:41.534335",
+  "inference_time_s": 66.09,
+  "room_name": "eval-7317b0f7",
+  "stream_start_time": 1790505287.6438017,
+  "input_transcript": "Uh, you know, so here's what I'm thinking. Search for places in Austin under 2000. Then check the commute to my office. For 15 minutes, that's perfect. But if it's longer than raise my budget to 2500, so uh I can look at places closer to work.",
+  "input_asr_chunks": [],
+  "user_speech_end_rel": 30.75,
+  "latency": {
+    "input_duration_s": 47.46,
+    "output_duration_s": 62.46,
+    "first_speech_s": 34.65,
+    "user_speech_end_s": 30.75
+  },
+  "audio_agent_speech_start": 34.65,
+  "search_latency_breakdown": {
+    "room": "eval-7317b0f7",
+    "tool": "Search Tool",
+    "reasoning": 23.078,
+    "execution": 0.279,
+    "synthesis": 2.612,
+    "total": 25.969,
+    "agent_start_at": 1790505318.8439052
+  },
+  "transcript": "I found one apartment in Austin for under $2000 a month (APT1, $1900). To check the commute to your office from there, could you please provide the destination address and your preferred transport mode?",
+  "asr_chunks": [],
+  "actual_tool_calls": [
+    {
+      "function": "search_apartments",
+      "args": {
+        "city": "Austin",
+        "max_price": 2000
+      },
+      "timestamp_start": 28.31,
+      "timestamp_end": 28.59
+    }
+  ],
+  "status": "completed"
+}

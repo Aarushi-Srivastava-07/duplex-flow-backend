@@ -1,0 +1,44 @@
+{
+  "pid": "6998abd731d2ec50d067d5bd",
+  "example_id": "ecommerce_12",
+  "category": "ecommerce_support",
+  "title": "Hesitation with Category",
+  "provider": "gemini2_5",
+  "evaluated_at": "2026-09-27T16:00:29.100321",
+  "inference_time_s": 59.63,
+  "room_name": "eval-815273ac",
+  "stream_start_time": 1790505034.9182134,
+  "input_transcript": "Like you know I'm thinking something let me think electronic section would be great. He's really into catches and text stuff.",
+  "input_asr_chunks": [],
+  "user_speech_end_rel": 41.05,
+  "latency": {
+    "input_duration_s": 41.264,
+    "output_duration_s": 56.264,
+    "first_speech_s": 21.8,
+    "user_speech_end_s": 41.05
+  },
+  "audio_agent_speech_start": 21.8,
+  "search_latency_breakdown": {
+    "room": "eval-815273ac",
+    "tool": "Search Tool",
+    "reasoning": 12.484,
+    "execution": 0.0,
+    "synthesis": 1.055,
+    "total": 13.54,
+    "agent_start_at": 1790505052.9433045
+  },
+  "transcript": "Sure, I found a \"None Premium\" product in the electronics category for $99.99. Is there anything else I can help you with?",
+  "asr_chunks": [],
+  "actual_tool_calls": [
+    {
+      "function": "search_products",
+      "args": {
+        "category": "electronics",
+        "query": "gift"
+      },
+      "timestamp_start": 16.97,
+      "timestamp_end": 16.97
+    }
+  ],
+  "status": "completed"
+}

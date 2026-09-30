@@ -1,0 +1,44 @@
+{
+  "pid": "5ff07b5ee7a1d23e719e421e",
+  "example_id": "travel_07",
+  "category": "travel_identity",
+  "title": "Driver License Update",
+  "provider": "gemini2_5",
+  "evaluated_at": "2026-09-27T15:40:30.924582",
+  "inference_time_s": 63.72,
+  "room_name": "eval-ad33c53e",
+  "stream_start_time": 1790503837.07215,
+  "input_transcript": "Uh, um, the new driver's license number is D-l-5-5-5. Could you swap out the old one and put this new one in there?",
+  "input_asr_chunks": [],
+  "user_speech_end_rel": 14.2,
+  "latency": {
+    "input_duration_s": 45.0,
+    "output_duration_s": 60.0,
+    "first_speech_s": 28.65,
+    "user_speech_end_s": 14.2
+  },
+  "audio_agent_speech_start": 28.65,
+  "search_latency_breakdown": {
+    "room": "eval-ad33c53e",
+    "tool": "Search Tool",
+    "reasoning": 0.047,
+    "execution": 0.0,
+    "synthesis": 3.657,
+    "total": 3.704,
+    "agent_start_at": 1790503866.7433612
+  },
+  "transcript": "I've updated your driver's license number to DL555. Done. Your driver's license number has been successfully updated.",
+  "asr_chunks": [],
+  "actual_tool_calls": [
+    {
+      "function": "update_identity_doc",
+      "args": {
+        "doc_type": "driver_license",
+        "doc_number": "DL555"
+      },
+      "timestamp_start": 26.01,
+      "timestamp_end": 26.01
+    }
+  ],
+  "status": "completed"
+}

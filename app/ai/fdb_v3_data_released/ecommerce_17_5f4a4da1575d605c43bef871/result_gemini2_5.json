@@ -1,0 +1,43 @@
+{
+  "pid": "5f4a4da1575d605c43bef871",
+  "example_id": "ecommerce_17",
+  "category": "ecommerce_support",
+  "title": "False Start then Track",
+  "provider": "gemini2_5",
+  "evaluated_at": "2026-09-26T15:54:06.547316",
+  "inference_time_s": 67.87,
+  "room_name": "eval-d352c20a",
+  "stream_start_time": 1790418255.7436137,
+  "input_transcript": "Can you cancel my actually never mind the cancellation. Um, I changed my mind about that. Can you just track order GG5 for me instead? I want to see where it is.",
+  "input_asr_chunks": [],
+  "user_speech_end_rel": 14.95,
+  "latency": {
+    "input_duration_s": 45.677,
+    "output_duration_s": 60.677,
+    "first_speech_s": 26.45,
+    "user_speech_end_s": 14.95
+  },
+  "audio_agent_speech_start": 26.45,
+  "search_latency_breakdown": {
+    "room": "eval-d352c20a",
+    "tool": "Search Tool",
+    "reasoning": 0.024,
+    "execution": 0.0,
+    "synthesis": 3.215,
+    "total": 3.239,
+    "agent_start_at": 1790418283.6183186
+  },
+  "transcript": " Tracking order GG5 for you now. Your order is out for delivery.",
+  "asr_chunks": [],
+  "actual_tool_calls": [
+    {
+      "function": "track_order",
+      "args": {
+        "order_id": "GG5"
+      },
+      "timestamp_start": 24.66,
+      "timestamp_end": 24.66
+    }
+  ],
+  "status": "completed"
+}

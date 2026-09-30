@@ -1,0 +1,63 @@
+{
+  "pid": "695bd157114f0d2317f88617",
+  "example_id": "housing_22",
+  "category": "housing_location",
+  "title": "Filler-Heavy Multi-Tool Chain",
+  "provider": "gemini2_5",
+  "evaluated_at": "2026-09-26T16:57:11.500667",
+  "inference_time_s": 71.61,
+  "room_name": "eval-b8c4fad7",
+  "stream_start_time": 1790422040.4636736,
+  "input_transcript": "You know, um, can you first update my filter so pets are allowed? Um, I keep forgetting to set that. Then like search in Seattle for one bedroom and then once you find something, I'll check the transit time from there to the stadium because you know, I go to games pretty often.",
+  "input_asr_chunks": [],
+  "user_speech_end_rel": 18.9,
+  "latency": {
+    "input_duration_s": 50.1,
+    "output_duration_s": 65.1,
+    "first_speech_s": 33.0,
+    "user_speech_end_s": 18.9
+  },
+  "audio_agent_speech_start": 33.0,
+  "search_latency_breakdown": {
+    "room": "eval-b8c4fad7",
+    "tool": "Search Tool",
+    "reasoning": 9.335,
+    "execution": 0.651,
+    "synthesis": 1.712,
+    "total": 11.698,
+    "agent_start_at": 1790422085.2557418
+  },
+  "transcript": "I've updated your filters and started a search for one-bedroom apartments in Seattle. Once I have the results, I can check the transit time from any of those options to the stadium for you. The search found one apartment, APT1, for $1900 and the transit time to the stadium is 25 minutes.",
+  "asr_chunks": [],
+  "actual_tool_calls": [
+    {
+      "function": "update_search_filter",
+      "args": {
+        "filter_name": "pets_allowed",
+        "value": true
+      },
+      "timestamp_start": 33.13,
+      "timestamp_end": 33.31
+    },
+    {
+      "function": "search_apartments",
+      "args": {
+        "city": "Seattle",
+        "bedrooms": 1
+      },
+      "timestamp_start": 40.07,
+      "timestamp_end": 40.67
+    },
+    {
+      "function": "calculate_commute",
+      "args": {
+        "origin_address": "APT1",
+        "destination_address": "the stadium",
+        "mode": "transit"
+      },
+      "timestamp_start": 42.43,
+      "timestamp_end": 43.08
+    }
+  ],
+  "status": "completed"
+}

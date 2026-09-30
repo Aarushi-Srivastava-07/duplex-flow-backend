@@ -1,0 +1,44 @@
+{
+  "pid": "5ff07b5ee7a1d23e719e421e",
+  "example_id": "ecommerce_14",
+  "category": "ecommerce_support",
+  "title": "Filler-Heavy Cart Addition",
+  "provider": "gemini2_5",
+  "evaluated_at": "2026-09-26T15:46:55.696851",
+  "inference_time_s": 71.08,
+  "room_name": "eval-1ec7c866",
+  "stream_start_time": 1790417824.9175959,
+  "input_transcript": "well um so uh yeah so um I already found what I want. Can you add like two of them p- 5-2 to my cart. I want to get one for myself and one as a gift.",
+  "input_asr_chunks": [],
+  "user_speech_end_rel": 18.9,
+  "latency": {
+    "input_duration_s": 49.68,
+    "output_duration_s": 64.68,
+    "first_speech_s": 40.75,
+    "user_speech_end_s": 18.9
+  },
+  "audio_agent_speech_start": 40.75,
+  "search_latency_breakdown": {
+    "room": "eval-1ec7c866",
+    "tool": "Search Tool",
+    "reasoning": 0.014,
+    "execution": 0.0,
+    "synthesis": 4.957,
+    "total": 4.971,
+    "agent_start_at": 1790417868.6162314
+  },
+  "transcript": "Added 2 items (P-5-2) to your cart. Perfect, I've added 2 of P-5-2 to your cart.",
+  "asr_chunks": [],
+  "actual_tool_calls": [
+    {
+      "function": "add_to_cart",
+      "args": {
+        "product_id": "P-5-2",
+        "quantity": 2
+      },
+      "timestamp_start": 38.74,
+      "timestamp_end": 38.74
+    }
+  ],
+  "status": "completed"
+}

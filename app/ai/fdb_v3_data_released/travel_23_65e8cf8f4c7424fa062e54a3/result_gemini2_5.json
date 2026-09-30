@@ -1,0 +1,53 @@
+{
+  "pid": "65e8cf8f4c7424fa062e54a3",
+  "example_id": "travel_23",
+  "category": "travel_identity",
+  "title": "Heavy Fillers + Document Updates",
+  "provider": "gemini2_5",
+  "evaluated_at": "2026-09-27T15:52:41.538120",
+  "inference_time_s": 72.77,
+  "room_name": "eval-0f8790c5",
+  "stream_start_time": 1790504569.4914012,
+  "input_transcript": "Hmm. Um, so I need to like update my passport number to P112 because they just renewed it. And then uh, I also got a new drivers license, so could you change that one to D L9090 as well.",
+  "input_asr_chunks": [],
+  "user_speech_end_rel": 51.95,
+  "latency": {
+    "input_duration_s": 52.5,
+    "output_duration_s": 67.5,
+    "first_speech_s": 42.5,
+    "user_speech_end_s": 51.95
+  },
+  "audio_agent_speech_start": 42.5,
+  "search_latency_breakdown": {
+    "room": "eval-0f8790c5",
+    "tool": "Search Tool",
+    "reasoning": 3.609,
+    "execution": 0.0,
+    "synthesis": 2.28,
+    "total": 5.889,
+    "agent_start_at": 1790504617.0500963
+  },
+  "transcript": "I've updated your passport number to P1122 and your driver's license number to DL9090. Done.",
+  "asr_chunks": [],
+  "actual_tool_calls": [
+    {
+      "function": "update_identity_doc",
+      "args": {
+        "doc_type": "passport",
+        "doc_number": "P1122"
+      },
+      "timestamp_start": 41.71,
+      "timestamp_end": 41.71
+    },
+    {
+      "function": "update_identity_doc",
+      "args": {
+        "doc_type": "driver_license",
+        "doc_number": "DL9090"
+      },
+      "timestamp_start": 45.28,
+      "timestamp_end": 45.28
+    }
+  ],
+  "status": "completed"
+}

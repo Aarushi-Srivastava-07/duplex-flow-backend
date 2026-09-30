@@ -1,0 +1,53 @@
+{
+  "pid": "5f4a4da1575d605c43bef871",
+  "example_id": "finance_22",
+  "category": "finance_billing",
+  "title": "Heavy Fillers + Dual Autopay",
+  "provider": "gemini2_5",
+  "evaluated_at": "2026-09-26T16:29:43.890674",
+  "inference_time_s": 72.08,
+  "room_name": "eval-42b4b2e8",
+  "stream_start_time": 1790420392.0014193,
+  "input_transcript": "Um, I want to change my mortgage autopay. So it pulls from uh savings. That's the right account for that. Then um, I also want to set my credit card payment to come from my checking.",
+  "input_asr_chunks": [],
+  "user_speech_end_rel": 19.2,
+  "latency": {
+    "input_duration_s": 50.941,
+    "output_duration_s": 65.941,
+    "first_speech_s": 53.95,
+    "user_speech_end_s": 19.2
+  },
+  "audio_agent_speech_start": 53.95,
+  "search_latency_breakdown": {
+    "room": "eval-42b4b2e8",
+    "tool": "Search Tool",
+    "reasoning": 3.862,
+    "execution": 0.0,
+    "synthesis": 2.064,
+    "total": 5.925,
+    "agent_start_at": 1790420450.2177727
+  },
+  "transcript": "I've updated your mortgage autopay to pull from savings and your credit card payment to come from checking. Done. Both autopay settings have been updated.",
+  "asr_chunks": [],
+  "actual_tool_calls": [
+    {
+      "function": "modify_autopay",
+      "args": {
+        "bill_type": "mortgage",
+        "source_account": "savings"
+      },
+      "timestamp_start": 52.81,
+      "timestamp_end": 52.81
+    },
+    {
+      "function": "modify_autopay",
+      "args": {
+        "bill_type": "credit_card",
+        "source_account": "checking"
+      },
+      "timestamp_start": 56.15,
+      "timestamp_end": 56.15
+    }
+  ],
+  "status": "completed"
+}

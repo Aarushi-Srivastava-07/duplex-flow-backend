@@ -1,0 +1,44 @@
+{
+  "pid": "62a885d5b6af18b3d4579e1b",
+  "example_id": "ecommerce_11",
+  "category": "ecommerce_support",
+  "title": "Quantity Self-Correction",
+  "provider": "gemini2_5",
+  "evaluated_at": "2026-09-26T15:42:10.821810",
+  "inference_time_s": 63.01,
+  "room_name": "eval-d0e771f7",
+  "stream_start_time": 1790417540.3986454,
+  "input_transcript": "You know, like we'll go ahead and add the product B7 to my car. Make it three of them. No, no wait, that's too many. Uh just do one for now. I'll order more later if uh if I need to.",
+  "input_asr_chunks": [],
+  "user_speech_end_rel": 30.25,
+  "latency": {
+    "input_duration_s": 40.68,
+    "output_duration_s": 55.68,
+    "first_speech_s": 28.45,
+    "user_speech_end_s": 30.25
+  },
+  "audio_agent_speech_start": 28.45,
+  "search_latency_breakdown": {
+    "room": "eval-d0e771f7",
+    "tool": "Search Tool",
+    "reasoning": 0.347,
+    "execution": 0.0,
+    "synthesis": 3.234,
+    "total": 3.581,
+    "agent_start_at": 1790417571.226181
+  },
+  "transcript": "Product B7 has been added to your cart with quantity 1. OK, I've added B7 with quantity 1 to your cart.",
+  "asr_chunks": [],
+  "actual_tool_calls": [
+    {
+      "function": "add_to_cart",
+      "args": {
+        "product_id": "B7",
+        "quantity": 1
+      },
+      "timestamp_start": 27.59,
+      "timestamp_end": 27.59
+    }
+  ],
+  "status": "completed"
+}

@@ -1,0 +1,53 @@
+{
+  "pid": "62a885d5b6af18b3d4579e1b",
+  "example_id": "travel_20",
+  "category": "travel_identity",
+  "title": "Conditional Booking Under Budget",
+  "provider": "gemini2_5",
+  "evaluated_at": "2026-09-27T15:49:10.164381",
+  "inference_time_s": 66.67,
+  "room_name": "eval-fc986195",
+  "stream_start_time": 1790504357.2709472,
+  "input_transcript": "Here's a thing. I need to fly to Toronto in July 20th. If there happens to be flight under $300, go ahead and book it for Riley Ken. But if everything's too expensive, then just forget the flight and update my driver's license to DL8 instead.",
+  "input_asr_chunks": [],
+  "user_speech_end_rel": 37.6,
+  "latency": {
+    "input_duration_s": 46.98,
+    "output_duration_s": 61.98,
+    "first_speech_s": 36.0,
+    "user_speech_end_s": 37.6
+  },
+  "audio_agent_speech_start": 36.0,
+  "search_latency_breakdown": {
+    "room": "eval-fc986195",
+    "tool": "Search Tool",
+    "reasoning": 26.38,
+    "execution": 0.0,
+    "synthesis": 2.172,
+    "total": 28.552,
+    "agent_start_at": 1790504389.7505596
+  },
+  "transcript": "The flight to Toronto for July 20th was $450, which is above your $300 limit, so I did not book it. Instead, I've updated your driver's license document number to DL88.",
+  "asr_chunks": [],
+  "actual_tool_calls": [
+    {
+      "function": "search_flights",
+      "args": {
+        "destination": "Toronto",
+        "date": "July 20"
+      },
+      "timestamp_start": 27.4,
+      "timestamp_end": 28.15
+    },
+    {
+      "function": "update_identity_doc",
+      "args": {
+        "doc_type": "driver_license",
+        "doc_number": "DL88"
+      },
+      "timestamp_start": 30.31,
+      "timestamp_end": 30.31
+    }
+  ],
+  "status": "completed"
+}

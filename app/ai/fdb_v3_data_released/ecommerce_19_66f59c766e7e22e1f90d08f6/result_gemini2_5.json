@@ -1,0 +1,52 @@
+{
+  "pid": "66f59c766e7e22e1f90d08f6",
+  "example_id": "ecommerce_19",
+  "category": "ecommerce_support",
+  "title": "Product + Quantity Double Correction",
+  "provider": "gemini2_5",
+  "evaluated_at": "2026-09-26T15:55:16.113218",
+  "inference_time_s": 81.87,
+  "room_name": "eval-8d6267a5",
+  "stream_start_time": 1790418333.4559946,
+  "input_transcript": "Okay, so um search for a laptop. Wait, no, no, actually, I need a tablet. Um, not a laptop, a tablet. And add two of them to the card. Actually no, no, just one, just one. I only have uh the budget for one right now.",
+  "input_asr_chunks": [],
+  "user_speech_end_rel": 21.7,
+  "latency": {
+    "input_duration_s": 51.84,
+    "output_duration_s": 66.84,
+    "first_speech_s": 38.0,
+    "user_speech_end_s": 21.7
+  },
+  "audio_agent_speech_start": 38.0,
+  "search_latency_breakdown": {
+    "room": "eval-8d6267a5",
+    "tool": "Search Tool",
+    "reasoning": 28.348,
+    "execution": 0.0,
+    "synthesis": 1.867,
+    "total": 30.215,
+    "agent_start_at": 1790418368.078586
+  },
+  "transcript": "I've added 1 x \"tablet Premium\" (PROD1) to your cart.",
+  "asr_chunks": [],
+  "actual_tool_calls": [
+    {
+      "function": "search_products",
+      "args": {
+        "query": "tablet"
+      },
+      "timestamp_start": 30.94,
+      "timestamp_end": 30.94
+    },
+    {
+      "function": "add_to_cart",
+      "args": {
+        "product_id": "PROD1",
+        "quantity": 1
+      },
+      "timestamp_start": 32.76,
+      "timestamp_end": 32.76
+    }
+  ],
+  "status": "completed"
+}

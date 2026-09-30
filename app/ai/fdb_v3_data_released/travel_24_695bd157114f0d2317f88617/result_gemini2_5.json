@@ -1,0 +1,61 @@
+{
+  "pid": "695bd157114f0d2317f88617",
+  "example_id": "travel_24",
+  "category": "travel_identity",
+  "title": "Unsupported Tool Request (Hotel)",
+  "provider": "gemini2_5",
+  "evaluated_at": "2026-09-27T15:55:09.833195",
+  "inference_time_s": 76.04,
+  "room_name": "eval-355fb7ea",
+  "stream_start_time": 1790504716.6674027,
+  "input_transcript": "Well, great. So first, um, I need to find a flight to Vancouver uh November 5th and book it under the name Skyler. Then I was also hoping you could find a hotel near the airport for a couple of nights. And then finally, I need to update my visa number to V as in Victor-4-4.",
+  "input_asr_chunks": [],
+  "user_speech_end_rel": 25.8,
+  "latency": {
+    "input_duration_s": 56.76,
+    "output_duration_s": 71.76,
+    "first_speech_s": 46.0,
+    "user_speech_end_s": 25.8
+  },
+  "audio_agent_speech_start": 46.0,
+  "search_latency_breakdown": {
+    "room": "eval-355fb7ea",
+    "tool": "Search Tool",
+    "reasoning": 35.631,
+    "execution": 0.0,
+    "synthesis": 2.456,
+    "total": 38.087,
+    "agent_start_at": 1790504759.1405616
+  },
+  "transcript": "I've booked your flight to Vancouver for November 5th under Skyler (booking ref B789) and updated your visa number to V-4-4. I'm unable to search for hotels, but can search for apartments if you'd like.",
+  "asr_chunks": [],
+  "actual_tool_calls": [
+    {
+      "function": "search_flights",
+      "args": {
+        "destination": "Vancouver",
+        "date": "November 5"
+      },
+      "timestamp_start": 37.68,
+      "timestamp_end": 38.08
+    },
+    {
+      "function": "book_flight",
+      "args": {
+        "passenger_name": "Skyler"
+      },
+      "timestamp_start": 39.92,
+      "timestamp_end": 39.92
+    },
+    {
+      "function": "update_identity_doc",
+      "args": {
+        "doc_type": "visa",
+        "doc_number": "V-4-4"
+      },
+      "timestamp_start": 40.02,
+      "timestamp_end": 40.02
+    }
+  ],
+  "status": "completed"
+}

@@ -1,0 +1,44 @@
+{
+  "pid": "61517db6a7589569521b2356",
+  "example_id": "finance_03",
+  "category": "finance_billing",
+  "title": "Modify Autopay with Fillers",
+  "provider": "gemini2_5",
+  "evaluated_at": "2026-09-26T16:08:55.889435",
+  "inference_time_s": 77.66,
+  "room_name": "eval-ec319f86",
+  "stream_start_time": 1790419153.948323,
+  "input_transcript": "Um, so uh, I want to change um, I want to change my mortgage auto pay to pull from like my savings account, you know, instead of where it's pulling from now.",
+  "input_asr_chunks": [],
+  "user_speech_end_rel": 42.55,
+  "latency": {
+    "input_duration_s": 46.86,
+    "output_duration_s": 61.86,
+    "first_speech_s": 27.25,
+    "user_speech_end_s": 42.55
+  },
+  "audio_agent_speech_start": 27.25,
+  "search_latency_breakdown": {
+    "room": "eval-ec319f86",
+    "tool": "Search Tool",
+    "reasoning": 17.649,
+    "execution": 0.0,
+    "synthesis": 1.294,
+    "total": 18.943,
+    "agent_start_at": 1790419179.7144794
+  },
+  "transcript": "I've updated your mortgage autopay to pull from your savings account.",
+  "asr_chunks": [],
+  "actual_tool_calls": [
+    {
+      "function": "modify_autopay",
+      "args": {
+        "bill_type": "mortgage",
+        "source_account": "savings"
+      },
+      "timestamp_start": 24.47,
+      "timestamp_end": 24.47
+    }
+  ],
+  "status": "completed"
+}

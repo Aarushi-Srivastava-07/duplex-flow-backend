@@ -1,0 +1,44 @@
+{
+  "pid": "5f4a4da1575d605c43bef871",
+  "example_id": "travel_10",
+  "category": "travel_identity",
+  "title": "Date Correction with Fillers",
+  "provider": "gemini2_5",
+  "evaluated_at": "2026-09-27T15:43:40.572343",
+  "inference_time_s": 67.86,
+  "room_name": "eval-256513d0",
+  "stream_start_time": 1790504028.272846,
+  "input_transcript": "Looking at flights to Miami on October 5. Oh, wait. my schedule just changed. My meeting got moved. So actually make it October 7th instead.",
+  "input_asr_chunks": [],
+  "user_speech_end_rel": 16.85,
+  "latency": {
+    "input_duration_s": 47.648,
+    "output_duration_s": 62.648,
+    "first_speech_s": 35.25,
+    "user_speech_end_s": 16.85
+  },
+  "audio_agent_speech_start": 35.25,
+  "search_latency_breakdown": {
+    "room": "eval-256513d0",
+    "tool": "Search Tool",
+    "reasoning": 19.611,
+    "execution": 0.252,
+    "synthesis": 3.736,
+    "total": 23.599,
+    "agent_start_at": 1790504059.7402077
+  },
+  "transcript": "Searching for flights to Miami on October 7th. I found one flight available.",
+  "asr_chunks": [],
+  "actual_tool_calls": [
+    {
+      "function": "search_flights",
+      "args": {
+        "destination": "Miami",
+        "date": "October 7"
+      },
+      "timestamp_start": 27.48,
+      "timestamp_end": 27.73
+    }
+  ],
+  "status": "completed"
+}

@@ -1,0 +1,53 @@
+{
+  "pid": "66c4f3cb14cbfc4db836bd4e",
+  "example_id": "finance_10",
+  "category": "finance_billing",
+  "title": "Benefits + Exchange Combo",
+  "provider": "gemini2_5",
+  "evaluated_at": "2026-09-26T16:16:59.802756",
+  "inference_time_s": 72.98,
+  "room_name": "eval-14f92b78",
+  "stream_start_time": 1790419633.5312047,
+  "input_transcript": "First firstly, um, could you tell me what the benefits are for the travel card? I'm considering applying and and then separately um, I also need to know how much 200 British pounds would be in Japanese yen.",
+  "input_asr_chunks": [],
+  "user_speech_end_rel": 15.75,
+  "latency": {
+    "input_duration_s": 46.331,
+    "output_duration_s": 61.331,
+    "first_speech_s": 33.95,
+    "user_speech_end_s": 15.75
+  },
+  "audio_agent_speech_start": 33.95,
+  "search_latency_breakdown": {
+    "room": "eval-14f92b78",
+    "tool": "Search Tool",
+    "reasoning": 23.128,
+    "execution": 0.0,
+    "synthesis": 1.957,
+    "total": 25.086,
+    "agent_start_at": 1790419664.2157953
+  },
+  "transcript": "The travel card offers 2% cashback and no foreign transaction fees. Also, 200 British pounds is equivalent to 180 Japanese yen.",
+  "asr_chunks": [],
+  "actual_tool_calls": [
+    {
+      "function": "get_card_benefits",
+      "args": {
+        "card_type": "travel"
+      },
+      "timestamp_start": 28.61,
+      "timestamp_end": 28.61
+    },
+    {
+      "function": "get_exchange_rate",
+      "args": {
+        "amount": 200.0,
+        "from_currency": "GBP",
+        "to_currency": "JPY"
+      },
+      "timestamp_start": 28.73,
+      "timestamp_end": 28.73
+    }
+  ],
+  "status": "completed"
+}

@@ -1,0 +1,45 @@
+{
+  "pid": "69a9cf80f4d7668d5c815038",
+  "example_id": "housing_17",
+  "category": "housing_location",
+  "title": "Commute Mode Self-Correction",
+  "provider": "gemini2_5",
+  "evaluated_at": "2026-09-26T16:52:28.700471",
+  "inference_time_s": 69.2,
+  "room_name": "eval-56ebdc34",
+  "stream_start_time": 1790421757.7043672,
+  "input_transcript": "Like like um so calculate the transit time to the office right there. Wait, no, actually um I just remembered I'd be driving. So make it driving time to the office for my house instead.",
+  "input_asr_chunks": [],
+  "user_speech_end_rel": 15.7,
+  "latency": {
+    "input_duration_s": 47.46,
+    "output_duration_s": 62.46,
+    "first_speech_s": 26.6,
+    "user_speech_end_s": 15.7
+  },
+  "audio_agent_speech_start": 26.6,
+  "search_latency_breakdown": {
+    "room": "eval-56ebdc34",
+    "tool": "Search Tool",
+    "reasoning": 17.54,
+    "execution": 0.486,
+    "synthesis": 1.333,
+    "total": 19.359,
+    "agent_start_at": 1790421782.584943
+  },
+  "transcript": "Calculating driving time to the office from your house. It looks like that will be approximately 25 minutes.",
+  "asr_chunks": [],
+  "actual_tool_calls": [
+    {
+      "function": "calculate_commute",
+      "args": {
+        "origin_address": "my house",
+        "destination_address": "Downtown Office",
+        "mode": "driving"
+      },
+      "timestamp_start": 23.06,
+      "timestamp_end": 23.55
+    }
+  ],
+  "status": "completed"
+}

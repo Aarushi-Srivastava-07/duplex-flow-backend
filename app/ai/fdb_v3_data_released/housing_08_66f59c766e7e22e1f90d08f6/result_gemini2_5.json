@@ -1,0 +1,44 @@
+{
+  "pid": "66f59c766e7e22e1f90d08f6",
+  "example_id": "housing_08",
+  "category": "housing_location",
+  "title": "False Start Before Filter Update",
+  "provider": "gemini2_5",
+  "evaluated_at": "2026-09-26T16:40:32.220643",
+  "inference_time_s": 68.89,
+  "room_name": "eval-48c941f5",
+  "stream_start_time": 1790421042.5945184,
+  "input_transcript": "Okay, so um, I want to check the listings in. Actually, before before I do that, uh, could you just update my search filter so that it only shows me places that allow pets. I have a cat.",
+  "input_asr_chunks": [],
+  "user_speech_end_rel": 15.75,
+  "latency": {
+    "input_duration_s": 45.72,
+    "output_duration_s": 60.72,
+    "first_speech_s": 29.15,
+    "user_speech_end_s": 15.75
+  },
+  "audio_agent_speech_start": 29.15,
+  "search_latency_breakdown": {
+    "room": "eval-48c941f5",
+    "tool": "Search Tool",
+    "reasoning": 20.762,
+    "execution": 0.153,
+    "synthesis": 0.215,
+    "total": 21.131,
+    "agent_start_at": 1790421069.4598694
+  },
+  "transcript": "Filter updated. Filter has been successfully updated to allow pets.",
+  "asr_chunks": [],
+  "actual_tool_calls": [
+    {
+      "function": "update_search_filter",
+      "args": {
+        "filter_name": "pets_allowed",
+        "value": true
+      },
+      "timestamp_start": 26.5,
+      "timestamp_end": 26.65
+    }
+  ],
+  "status": "completed"
+}
